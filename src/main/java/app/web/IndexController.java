@@ -51,6 +51,15 @@ public class IndexController {
                 .body(allUsers);
     }
 
+    @PutMapping("/users/{userId}")
+    public ResponseEntity<UserResponse> updateUserInfo(@PathVariable UUID userId, @Valid UpdateUserRequest updateUserRequest){
+        User user = userService.updateUserInfo(userId, updateUserRequest);
+        UserResponse userResponse = DtoMapper.fromUser2(user);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userResponse);
+    }
+
     @PostMapping("/parties")
     public ResponseEntity<PartyResponse> createNewParty(@Valid @RequestBody CreatePartyRequest createPartyRequest, @RequestParam(name = "userId") UUID userId){
         Party party = partyService.createNewParty(createPartyRequest, userId);

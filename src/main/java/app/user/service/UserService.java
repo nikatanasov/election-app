@@ -5,6 +5,8 @@ import app.user.model.User;
 import app.user.model.UserRole;
 import app.user.repository.UserRepository;
 import app.web.dto.RegisterRequest;
+import app.web.dto.UpdateUserRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -45,4 +47,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User updateUserInfo(UUID userId, @Valid UpdateUserRequest updateUserRequest) {
+        User user = getById(userId);
+        user.setUsername(updateUserRequest.getUsername());
+        user.setPassword(updateUserRequest.getPassword());
+        user.setEmail(updateUserRequest.getEmail());
+
+        return userRepository.save(user);
+    }
 }
