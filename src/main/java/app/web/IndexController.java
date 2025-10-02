@@ -120,12 +120,4 @@ public class IndexController {
                 .body(voteResponse);
     }
 
-    @DeleteMapping("/votes/{userId}")
-    public ResponseEntity<Map<String, String>> deleteVoteOfUser(@PathVariable UUID userId){
-        voteService.deleteVoteOfUserWithId(userId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(Map.of("message", "Successfully deleted vote for this user!"));
-    }
-
 }
