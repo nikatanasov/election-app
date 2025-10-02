@@ -9,25 +9,33 @@ import app.vote.repository.VoteRepository;
 import app.web.dto.VoteRequest;
 import app.web.dto.VoteResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class VoteService {
     private final VoteRepository voteRepository;
     private final UserService userService;
     private final PartyService partyService;
+    private final MailSender mailSender;
 
     @Autowired
-    public VoteService(VoteRepository voteRepository, UserService userService, PartyService partyService) {
+    public VoteService(VoteRepository voteRepository, UserService userService, PartyService partyService, MailSender mailSender) {
         this.voteRepository = voteRepository;
         this.userService = userService;
         this.partyService = partyService;
+        this.mailSender = mailSender;
     }
 
     public Vote createNewVote(VoteRequest voteRequest, UUID userId) {
@@ -40,6 +48,19 @@ public class VoteService {
                 .build();
         Vote savedVote = voteRepository.save(vote);
         party.getVotes().add(savedVote);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(user.getEmail());
+        message.setSubject("User "+user.getUsername()+" voted successfully!");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        message.setText("User "+user.getUsername()+" voted for "+party.getName()+" at "+vote.getVotedAt().format(dateTimeFormatter)+" time!");
+
+        try {
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.warn("There was an issue sending email to "+user.getEmail()+" due to "+e.getMessage()+"!");
+        }
+
         return savedVote;
     }
 
