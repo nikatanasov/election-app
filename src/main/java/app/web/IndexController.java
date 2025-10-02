@@ -35,7 +35,7 @@ public class IndexController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest){
+    public ResponseEntity<RegisterResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest){
         User user = userService.registerUser(registerRequest);
         RegisterResponse registerResponse = DtoMapper.fromUser(user);
         return ResponseEntity
