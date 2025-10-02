@@ -45,8 +45,4 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void deleteUser(UUID userId) {
-        User user = getById(userId);
-        userRepository.delete(user);
-    }
 }

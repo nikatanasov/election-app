@@ -47,11 +47,6 @@ public class VoteService {
         return voteRepository.findAll();
     }
 
-    @Transactional
-    public void deleteVoteOfUserWithId(UUID userId) {
-        voteRepository.deleteByUserId(userId);
-    }
-
     public Vote getVoteById(UUID voteId) {
         return voteRepository.findById(voteId).orElseThrow(() -> new RuntimeException("Vote does not exist!"));
     }

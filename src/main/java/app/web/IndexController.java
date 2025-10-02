@@ -94,14 +94,6 @@ public class IndexController {
                 .body(voteResponses);
     }
 
-    @DeleteMapping("/users/{userId}")
-    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable UUID userId){
-        userService.deleteUser(userId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(Map.of("message", "User deleted successfully"));
-    }
-
     @GetMapping("/users/{userId}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable UUID userId){
         User user = userService.getById(userId);
