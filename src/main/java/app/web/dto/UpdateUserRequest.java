@@ -12,16 +12,11 @@ import lombok.Data;
 public class UpdateUserRequest {
 
     @Size(min = 5, max = 15)
-    @NotNull
-    @NotBlank
     private String username;
 
     @Size(min = 5, max = 15)
-    @NotNull
-    @NotBlank
     private String password;
 
-    @NotNull
     @Email
     private String email;
 }
