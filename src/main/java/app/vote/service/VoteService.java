@@ -47,7 +47,7 @@ public class VoteService {
                 .votedAt(LocalDateTime.now())
                 .build();
         Vote savedVote = voteRepository.save(vote);
-        party.getVotes().add(savedVote);
+        //party.getVotes().add(savedVote);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
